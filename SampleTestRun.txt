@@ -1,0 +1,14 @@
+gcc gateway.c -o gateway -lpthread
+gcc sensor.c -o sensor -lpthread
+gcc smartdevice.c -o device -lpthread
+
+./gateway SampleInput/Gateway/GatewayConfig.txt
+
+./device SampleInput/Device/Device_Area_1.txt
+./device SampleInput/Device/Device_Area_2.txt
+
+./sensor SampleInput/Sensor_Config/Area1_Sensor1.txt SampleInput/Sensor_Input/Input_Area1_Sensor1.txt
+./sensor SampleInput/Sensor_Config/Area1_Sensor2.txt SampleInput/Sensor_Input/Input_Area1_Sensor2.txt
+./sensor SampleInput/Sensor_Config/Area2_Sensor1.txt SampleInput/Sensor_Input/Input_Area2_Sensor1.txt
+./sensor SampleInput/Sensor_Config/Area2_Sensor2.txt SampleInput/Sensor_Input/Input_Area2_Sensor2.txt
+

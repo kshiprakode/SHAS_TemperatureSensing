@@ -1,0 +1,24 @@
+
+Open terminal and navigate to the source folder
+Compiling the Gateway -  gcc gateway.c -o gateway -lpthread
+Compiling the Sensor  -  gcc sensor.c -o sensor -lpthread
+Compiling the SmartDevice -  gcc smartdevice.c -o device -lpthread
+
+Running the Gateway -
+General -	./gateway <path to gateway configuration file>
+Gateway -	./gateway SampleInput/Gateway/GatewayConfig.txt
+
+Running the Smart Device -
+General- 		./device <path to device configuration file>
+Device 1 (Area 1)-	./device SampleInput/Device/Device_Area_1.txt
+Device 2 (Area 2)-	./device SampleInput/Device/Device_Area_2.txt
+
+Running the Sensor -
+General-		./sensor <path to Sensor Configuration file> <Path to Sensor Input File>	
+Sensor 1 (Area 1)- 	./sensor SampleInput/Sensor_Config/Area1_Sensor1.txt SampleInput/Sensor_Input/Input_Area1_Sensor1.txt
+Sensor 2 (Area 1)-	./sensor SampleInput/Sensor_Config/Area1_Sensor2.txt SampleInput/Sensor_Input/Input_Area1_Sensor2.txt
+Sensor 3 (Area 2)-	./sensor SampleInput/Sensor_Config/Area2_Sensor1.txt SampleInput/Sensor_Input/Input_Area2_Sensor1.txt
+Sensor 4 (Area 3)-	./sensor SampleInput/Sensor_Config/Area2_Sensor2.txt SampleInput/Sensor_Input/Input_Area2_Sensor2.txt
+
+Gateway output is displayed in output.txt
+
