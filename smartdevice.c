@@ -1,12 +1,14 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<pthread.h>
-#include<sys/types.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<signal.h>
-#include<stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <signal.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 #define MESSAGE_LENGTH 256
 
@@ -23,6 +25,12 @@ void ReadConfig(char*);
 
 int main(int argc, char *argv[])
 {
+	if(argc<3)
+	{
+		printf("Incorrect Arguments!\nFormat: .\\a.out <Device Configuration File> <Device Input File>\n");
+		exit(0);
+	}
+
 	int i=0,j=0;
 	int clnt;
 	pthread_t pthread_send_state,pthread_switch_action;
@@ -67,7 +75,7 @@ void ReadConfig(char *filename)
 
 	fscanf(config,"%[^:]:%s\ndevice:%[^:]:%[^:]:%s",GatewayIP,GatewayPort,SmartDeviceIP,SmartDevicePort,SmartDeviceArea);
 
-	close(config);
+	fclose(config);
 }
 
 //Function to connect to the socket server

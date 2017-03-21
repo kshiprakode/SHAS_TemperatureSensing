@@ -1,10 +1,12 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<pthread.h>
-#include<sys/types.h>
-#include<string.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <sys/types.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 #define MESSAGE_LENGTH 256
 
@@ -23,6 +25,11 @@ void ReadConfig(char *filename);
 
 int main(int argc, char *argv[])
 {
+	if(argc<3)
+	{
+		printf("Incorrect Arguments!\nFormat: .\\a.out <Sensor Configuration File> <Sensor Input File>\n");
+		exit(0);
+	}
 	int i=0,j=0;
 	int k=0;
 	ReadConfig(argv[1]);
@@ -77,7 +84,7 @@ void ReadConfig(char *filename)
 
 	fscanf(config,"%[^:]:%s\nsensor:%[^:]:%[^:]:%s",GatewayIP,GatewayPort,SensorIP,SensorPort,SensorArea);
 
-	close(config);
+	fclose(config);
 
 }
 

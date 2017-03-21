@@ -7,10 +7,13 @@
 #include <netinet/in.h>
 #include <stdbool.h>
 #include <signal.h>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 #define MAX_CONNECTION 20
 #define MESSAGE_LENGTH 256
 
+// Structure that maintains the list of connnected sensors
 struct sensor_device{
 	int id;
 	char IP[16];
@@ -21,6 +24,7 @@ struct sensor_device{
 	int lastValue;
 };
 
+// Structure that maintains the list of connnected devices and sensors
 typedef struct {
 	struct sockaddr address;
 	int addr_len;
@@ -37,6 +41,7 @@ FILE *output;
 pthread_t thread, thread_setValue;
 int sockfd;
 FILE *devStatus;
+socklen_t clilen;
 
 void *connection(void *);
 void *setValue();
@@ -46,6 +51,11 @@ void MakeConnection();
 
 int main(int argc, char *argv[])
 {
+	if(argc<2)
+	{
+		printf("Incorrect Arguments!\nFormat: .\\a.out <Gateway Configuration File>\n");
+		exit(0);
+	}
 
 	int clnt;
 	signal(SIGINT, INThandler); 
@@ -58,6 +68,8 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+
+// Accepts the incoming messages and parses them
 void * connection(void *clnt)
 {
 	int client = *(int*)clnt;
@@ -89,7 +101,8 @@ void * connection(void *clnt)
 			break;
 		//Read incoming messages to Gateway
 		bzero(message,MESSAGE_LENGTH);
-		if((message_size = read(client,message,256))<0)
+		message_size = read(client,message,256);
+		if(message_size < 0)
 		{
 			perror("recv");
 			return 0;
@@ -134,7 +147,7 @@ void * connection(void *clnt)
 							write(connectionList[i].sockid, "Type:Switch;Action:on", sizeof("Type:Switch;Action:on")); 
 							strcpy(status,"ON");
 						}
-						else //sinc 1st sensor's value is less than 32, we are checking the value of the next sensor
+						else //since 1st sensor's value is less than 32, we are checking the value of the next sensor
 						{
 							for(j=0;j<connectionCount;j++)
 							{
@@ -224,7 +237,7 @@ void * connection(void *clnt)
 	return 0;
 }
 
-//Function to send message to Sensor to set the interval
+// Function to send message to Sensor to set the interval
 void *setValue()
 {
 	char Message_SetValue[100];
@@ -344,7 +357,9 @@ void MakeConnection()
 	
 	//Accept incoming messages and spawn a thread for each incoming connection at the socket
 
-	while(ActiveClient->sockid = accept(sockfd, &ActiveClient->address, &ActiveClient->addr_len))
+	clilen = ActiveClient->addr_len;
+
+	while((ActiveClient->sockid = accept(sockfd, &ActiveClient->address, &clilen)))
 	{
 		temp_sockfd = ActiveClient->sockid;
 		if((pthread_create(&thread,NULL,connection,(void*)&temp_sockfd))!=0)
